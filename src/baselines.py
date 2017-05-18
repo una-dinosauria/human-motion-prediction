@@ -141,7 +141,6 @@ def main():
   FLAGS.loss_to_use = "sampling_based"
   FLAGS.omit_one_hot = True,
   FLAGS.residual_velocities = False,
-  forward_only = False,
   dtype = tf.float32
 
   # Baselines are very simple. No need to use the GPU.
@@ -162,7 +161,6 @@ def main():
         len( actions ),
         not FLAGS.omit_one_hot,
         FLAGS.residual_velocities,
-        forward_only=forward_only,
         dtype=dtype)
 
     # Load the data
