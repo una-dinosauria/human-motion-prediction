@@ -485,7 +485,7 @@ def train():
         sys.stdout.flush()
 
 
-def get_srnn_gts( actions, model, test_set, data_mean, data_std, dim_to_ignore, one_hot ):
+def get_srnn_gts( actions, model, test_set, data_mean, data_std, dim_to_ignore, one_hot, to_euler=True ):
   """
   Get the ground truths for srnn's sequences, and convert to Euler angles.
   (the error is always computed in Euler angles).
@@ -498,6 +498,7 @@ def get_srnn_gts( actions, model, test_set, data_mean, data_std, dim_to_ignore, 
     data_std: d-long vector with the standard deviation of the training data.
     dim_to_ignore: dimensions that we are not using to train/predict.
     one_hot: whether the data comes with one-hot encoding indicating action.
+    to_euler: whether to convert the angles to Euler format or keep thm in exponential map
 
   Returns
     srnn_gts_euler: a dictionary where the keys are actions, and the values
@@ -514,9 +515,10 @@ def get_srnn_gts( actions, model, test_set, data_mean, data_std, dim_to_ignore, 
     for i in np.arange( srnn_expmap.shape[0] ):
       denormed = data_utils.unNormalizeData(srnn_expmap[i,:,:], data_mean, data_std, dim_to_ignore, actions, one_hot )
 
-      for j in np.arange( denormed.shape[0] ):
-        for k in np.arange(3,97,3):
-          denormed[j,k:k+3] = data_utils.rotmat2euler( data_utils.expmap2rotmat( denormed[j,k:k+3] ))
+      if to_euler:
+        for j in np.arange( denormed.shape[0] ):
+          for k in np.arange(3,97,3):
+            denormed[j,k:k+3] = data_utils.rotmat2euler( data_utils.expmap2rotmat( denormed[j,k:k+3] ))
 
       srnn_gt_euler.append( denormed );
 
@@ -550,15 +552,19 @@ def sample():
 
     # === Read and denormalize the gt with srnn's seeds, as we'll need them
     # many times for evaluation in Euler Angles ===
+    srnn_gts_expmap = get_srnn_gts( actions, model, test_set, data_mean,
+                              data_std, dim_to_ignore, not FLAGS.omit_one_hot, to_euler=False )
     srnn_gts_euler = get_srnn_gts( actions, model, test_set, data_mean,
                               data_std, dim_to_ignore, not FLAGS.omit_one_hot )
 
+    # Clean and create a new h5 file of samples
     SAMPLES_FNAME = 'samples.h5'
     try:
       os.remove( SAMPLES_FNAME )
     except OSError:
       pass
 
+    # Predict and save for each action
     for action in actions:
 
       # Make prediction with srnn' seeds
@@ -570,12 +576,17 @@ def sample():
       # denormalizes too
       srnn_pred_expmap = data_utils.revert_output_format( srnn_poses, data_mean, data_std, dim_to_ignore, actions, not FLAGS.omit_one_hot )
 
-      # Save the sample
+      # Save the conditioning seeds
+
+      # Save the samples
       with h5py.File( SAMPLES_FNAME, 'a' ) as hf:
         for i in np.arange(8):
-          eulerchannels_pred = srnn_pred_expmap[i]
-          node_name = 'seeds_expmap/{1}_{0}'.format(i, action)
-          hf.create_dataset( node_name, data=eulerchannels_pred )
+          # Save conditioning ground truth
+          node_name = 'expmap/gt/{1}_{0}'.format(i, action)
+          hf.create_dataset( node_name, data=srnn_gts_expmap[action][i] )
+          # Save prediction
+          node_name = 'expmap/preds/{1}_{0}'.format(i, action)
+          hf.create_dataset( node_name, data=srnn_pred_expmap[i] )
 
       # Compute and save the errors here
       mean_errors = np.zeros( (len(srnn_pred_expmap), srnn_pred_expmap[0].shape[0]) )
@@ -603,7 +614,7 @@ def sample():
       print( action )
       print( ','.join(map(str, mean_mean_errors.tolist() )) )
 
-      with h5py.File( os.path.join(train_dir, SAMPLES_FNAME), 'a' ) as hf:
+      with h5py.File( SAMPLES_FNAME, 'a' ) as hf:
         node_name = 'mean_{0}_error'.format( action )
         hf.create_dataset( node_name, data=mean_mean_errors )
 

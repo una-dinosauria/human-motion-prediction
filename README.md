@@ -30,6 +30,27 @@ rm h3.6m.zip
 cd ..
 ```
 
+### Quick demo
+
+For a quick demo, you can train for a few iterations and visualize the outputs
+of your model.
+
+To train, run
+```bash
+python src/translate.py --action walking --seq_length_out 25 --iterations 10000
+```
+
+To save some samples of the model, run
+```bash
+python src/translate.py --action walking --seq_length_out 25 --iterations 10000 --sample --load 10000
+```
+
+Finally, to visualize the samples run
+```bash
+python src/forward_kinematics.py
+```
+
+
 ### Running average baselines
 
 To reproduce the running average baseline results from our paper, run
