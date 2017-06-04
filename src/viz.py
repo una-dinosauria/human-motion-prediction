@@ -9,12 +9,24 @@ from mpl_toolkits.mplot3d import Axes3D
 
 class Ax3DPose(object):
   def __init__(self, ax, lcolor="#3498db", rcolor="#e74c3c"):
+    """
+    Create a 3d pose visualizer that can be updated with new poses.
+
+    Args
+      ax: 3d axis to plot the 3d pose on
+      lcolor: String. Colour for the left part of the body
+      rcolor: String. Colour for the right part of the body
+    """
+
+    # Start and endpoints of our representation
     self.I   = np.array([1,2,3,1,7,8,1, 13,14,15,14,18,19,14,26,27])-1
     self.J   = np.array([2,3,4,7,8,9,13,14,15,16,18,19,20,26,27,28])-1
+    # Left / right indicator
     self.LR  = np.array([1,1,1,0,0,0,0, 0, 0, 0, 0, 0, 0, 1, 1, 1], dtype=bool)
     self.ax = ax
 
     vals = np.zeros((32, 3))
+
     # Make connection matrix
     self.plots = []
     for i in np.arange( len(self.I) ):
@@ -28,6 +40,17 @@ class Ax3DPose(object):
     self.ax.set_zlabel("z")
 
   def update(self, channels, lcolor="#3498db", rcolor="#e74c3c"):
+    """
+    Update the plotted 3d pose.
+
+    Args
+      channels: 96-dim long np array. The pose to plot.
+      lcolor: String. Colour for the left part of the body.
+      rcolor: String. Colour for the right part of the body.
+    Returns
+      Nothing. Simply updates the axis with the new pose.
+    """
+
     assert channels.size == 96, "channels should have 96 entries, it has %d instead" % channels.size
     vals = np.reshape( channels, (32, -1) )
 
