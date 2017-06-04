@@ -30,6 +30,26 @@ rm h3.6m.zip
 cd ..
 ```
 
+### Quick demo and visualization
+
+For a quick demo, you can train for a few iterations and visualize the outputs
+of your model.
+
+To train, run
+```bash
+python src/translate.py --action walking --seq_length_out 25 --iterations 10000
+```
+
+To save some samples of the model, run
+```bash
+python src/translate.py --action walking --seq_length_out 25 --iterations 10000 --sample --load 10000
+```
+
+Finally, to visualize the samples run
+```bash
+python src/forward_kinematics.py
+```
+
 ### Running average baselines
 
 To reproduce the running average baseline results from our paper, run
@@ -61,9 +81,6 @@ or `--action all` (default) to train on all actions.
 
 The code will log the error in Euler angles for each action to [tensorboard](https://www.tensorflow.org/get_started/summaries_and_tensorboard). You can track the progress during training by typing `tensorboard --logdir experiments` in the terminal and checking the board under http://127.0.1.1:6006/ in your browser (occasionally, tensorboard might pick another url).
 
-### Visualization
-
-TODO
 
 ### Citing
 
