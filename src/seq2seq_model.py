@@ -447,7 +447,7 @@ class Seq2SeqModel(object):
     """
 
     # Select entries at random
-    all_keys        = data.keys()
+    all_keys    = list(data.keys())
     chosen_keys = np.random.choice( len(all_keys), self.batch_size )
 
     # How many frames in total do we need?
