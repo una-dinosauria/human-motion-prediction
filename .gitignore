@@ -1,3 +1,4 @@
+*.h5
 *.pyc
 data/
 experiments/
