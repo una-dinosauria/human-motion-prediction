@@ -20,7 +20,7 @@ The code in this repository was written by [Julieta Martinez](https://github.com
 First things first, clone this repo and get the human3.6m dataset on exponential map format.
 
 ```bash
-git clone git@github.com:una-dinosauria/human-motion-prediction.git
+git clone https://github.com/una-dinosauria/human-motion-prediction.git
 cd human-motion-prediction
 mkdir data
 cd data
