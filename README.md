@@ -50,7 +50,7 @@ Finally, to visualize the samples run
 python src/forward_kinematics.py
 ```
 
-This should predict a visualization similar to this one
+This should create a visualization similar to this one
 
 ![A person walking](https://raw.githubusercontent.com/una-dinosauria/human-motion-prediction/master/imgs/walking.gif)
 
