@@ -443,7 +443,7 @@ class Seq2SeqModel(object):
       actions: a list of the actions we are using
     Returns
       The tuple (encoder_inputs, decoder_inputs, decoder_outputs);
-      the constructed batches have the proper format to call step(...) later.https://github.com/asheshjain399/RNNexp/blob/srnn/structural_rnn/forecastTrajectories.py#L29
+      the constructed batches have the proper format to call step(...) later.
     """
 
     # Select entries at random
