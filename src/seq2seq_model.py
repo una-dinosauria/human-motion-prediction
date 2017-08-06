@@ -67,8 +67,8 @@ class Seq2SeqModel(object):
     print( "Input size is %d" % self.input_size )
 
     # Summary writers for train and test runs
-    self.train_writer = tf.summary.FileWriter(os.path.join( summaries_dir, 'train'))
-    self.test_writer  = tf.summary.FileWriter(os.path.join( summaries_dir, 'test'))
+    self.train_writer = tf.summary.FileWriter(os.path.normpath(os.path.join( summaries_dir, 'train')))
+    self.test_writer  = tf.summary.FileWriter(os.path.normpath(os.path.join( summaries_dir, 'test')))
 
     self.source_seq_len = source_seq_len
     self.target_seq_len = target_seq_len

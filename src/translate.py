@@ -35,8 +35,8 @@ tf.app.flags.DEFINE_integer("seq_length_out", 10, "Number of frames that the dec
 tf.app.flags.DEFINE_boolean("omit_one_hot", False, "Whether to remove one-hot encoding from the data")
 tf.app.flags.DEFINE_boolean("residual_velocities", False, "Add a residual connection that effectively models velocities")
 # Directories
-tf.app.flags.DEFINE_string("data_dir", "./data/h3.6m/dataset", "Data directory")
-tf.app.flags.DEFINE_string("train_dir", "./experiments/", "Training directory.")
+tf.app.flags.DEFINE_string("data_dir", os.path.normpath("./data/h3.6m/dataset"), "Data directory")
+tf.app.flags.DEFINE_string("train_dir", os.path.normpath("./experiments/"), "Training directory.")
 
 tf.app.flags.DEFINE_string("action","all", "The action to train on. all means all the actions, all_periodic means walking, eating and smoking")
 tf.app.flags.DEFINE_string("loss_to_use","sampling_based", "The type of loss to use, supervised or sampling_based")
@@ -49,7 +49,7 @@ tf.app.flags.DEFINE_integer("load", 0, "Try to load a previous checkpoint.")
 
 FLAGS = tf.app.flags.FLAGS
 
-train_dir = os.path.join( FLAGS.train_dir, FLAGS.action,
+train_dir = os.path.normpath(os.path.join( FLAGS.train_dir, FLAGS.action,
   'out_{0}'.format(FLAGS.seq_length_out),
   'iterations_{0}'.format(FLAGS.iterations),
   FLAGS.architecture,
@@ -58,9 +58,9 @@ train_dir = os.path.join( FLAGS.train_dir, FLAGS.action,
   'depth_{0}'.format(FLAGS.num_layers),
   'size_{0}'.format(FLAGS.size),
   'lr_{0}'.format(FLAGS.learning_rate),
-  'residual_vel' if FLAGS.residual_velocities else 'not_residual_vel')
+  'residual_vel' if FLAGS.residual_velocities else 'not_residual_vel'))
 
-summaries_dir = os.path.join( train_dir, "log" ) # Directory for TB summaries
+summaries_dir = os.path.normpath(os.path.join( train_dir, "log" )) # Directory for TB summaries
 
 def create_model(session, actions, sampling=False):
   """Create translation model and initialize or load parameters in session."""
@@ -94,7 +94,7 @@ def create_model(session, actions, sampling=False):
     # Check if the specific checkpoint exists
     if FLAGS.load > 0:
       if os.path.isfile(os.path.join(train_dir,"checkpoint-{0}.index".format(FLAGS.load))):
-        ckpt_name = os.path.join( os.path.join(train_dir,"checkpoint-{0}".format(FLAGS.load)) )
+        ckpt_name = os.path.normpath(os.path.join( os.path.join(train_dir,"checkpoint-{0}".format(FLAGS.load)) ))
       else:
         raise ValueError("Asked to load checkpoint {0}, but it does not seem to exist".format(FLAGS.load))
     else:
@@ -476,7 +476,7 @@ def train():
         # Save the model
         if current_step % FLAGS.save_every == 0:
           print( "Saving the model..." ); start_time = time.time()
-          model.saver.save(sess, os.path.join(train_dir, 'checkpoint'), global_step=current_step )
+          model.saver.save(sess, os.path.normpath(os.path.join(train_dir, 'checkpoint')), global_step=current_step )
           print( "done in {0:.2f} ms".format( (time.time() - start_time)*1000) )
 
         # Reset global time and loss
