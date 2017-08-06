@@ -187,12 +187,14 @@ def main():
     ob.update( xyz_gt[i,:] )
     plt.show(block=False)
     fig.canvas.draw()
+    plt.pause(0.01)
 
   # Plot the prediction
   for i in range(nframes_pred):
     ob.update( xyz_pred[i,:], lcolor="#9b59b6", rcolor="#2ecc71" )
     plt.show(block=False)
     fig.canvas.draw()
+    plt.pause(0.01)
 
 
 if __name__ == '__main__':
