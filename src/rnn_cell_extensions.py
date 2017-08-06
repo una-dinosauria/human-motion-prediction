@@ -5,13 +5,22 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import tensorflow as tf
+
 from tensorflow.contrib.rnn.python.ops.core_rnn_cell import RNNCell
-from tensorflow.contrib.rnn.python.ops.core_rnn_cell import LSTMStateTuple
+
+# The import for LSTMStateTuple changes in TF >= 1.2.0
+from pkg_resources import parse_version as pv
+if pv(tf.__version__) >= pv('1.2.0'):
+  from tensorflow.contrib.rnn import LSTMStateTuple
+else:
+  from tensorflow.contrib.rnn.python.ops.core_rnn_cell import LSTMStateTuple
+del pv
+
 from tensorflow.python.ops import variable_scope as vs
 
 import collections
 import math
-import tensorflow as tf
 
 class ResidualWrapper(RNNCell):
   """Operator adding residual connections to a given cell."""
