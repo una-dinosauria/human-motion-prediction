@@ -80,7 +80,7 @@ class Seq2SeqModel(object):
 
     # === Create the RNN that will keep the state ===
     print('rnn_size = {0}'.format( rnn_size ))
-    single_cell = tf.contrib.rnn.GRUCell( self.rnn_size )
+    cell = tf.contrib.rnn.GRUCell( self.rnn_size )
 
     if num_layers > 1:
       cell = tf.contrib.rnn.MultiRNNCell( [tf.contrib.rnn.GRUCell(self.rnn_size) for _ in range(num_layers)] )
