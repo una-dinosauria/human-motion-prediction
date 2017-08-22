@@ -13,7 +13,7 @@ The code in this repository was written by [Julieta Martinez](https://github.com
 ### Dependencies
 
 * [h5py](https://github.com/h5py/h5py) -- to save samples
-* [Tensorflow](https://github.com/tensorflow/tensorflow/) 1.0 or later.
+* [Tensorflow](https://github.com/tensorflow/tensorflow/) 1.2 or later.
 
 ### Get this code and the data
 

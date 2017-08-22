@@ -83,10 +83,7 @@ class Seq2SeqModel(object):
     single_cell = tf.contrib.rnn.GRUCell( self.rnn_size )
 
     if num_layers > 1:
-      # Create multiple rnn layers
-      cell = tf.contrib.rnn.MultiRNNCell( [single_cell] * num_layers )
-    else:
-      cell = single_cell
+      cell = tf.contrib.rnn.MultiRNNCell( [tf.contrib.rnn.GRUCell(self.rnn_size) for _ in range(num_layers)] )
 
     # === Transform the inputs ===
     with tf.name_scope("inputs"):
