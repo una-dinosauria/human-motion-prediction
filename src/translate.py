@@ -225,7 +225,7 @@ def train():
             # https://github.com/asheshjain399/RNNexp/blob/srnn/structural_rnn/CRFProblems/H3.6m/dataParser/Utils/motionGenerationError.m#L40-L54
             idx_to_use = np.where( np.std( gt_i, 0 ) > 1e-4 )[0]
             
-            euc_error = np.power( srnn_gts_euler[action][i][:,idx_to_use] - eulerchannels_pred[:,idx_to_use], 2)
+            euc_error = np.power( gt_i[:,idx_to_use] - eulerchannels_pred[:,idx_to_use], 2)
             euc_error = np.sum(euc_error, 1)
             euc_error = np.sqrt( euc_error )
             mean_errors[i,:] = euc_error
