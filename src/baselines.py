@@ -10,6 +10,7 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 
 import translate
+from translate import define_actions
 import data_utils
 import seq2seq_model
 
@@ -115,14 +116,7 @@ def denormalize_and_convert_to_euler( data, data_mean, data_std, dim_to_ignore, 
 
 def main():
 
-
-  actions = ["walking", "eating", "smoking", "discussion"]
-
-  # TODO make this a runtime option
-  # Uncomment th eliens
-
-  # actions.extend(["directions", "greeting", "phoning", "posing", "purchases",
-  #   "sitting", "sittingdown", "takingphoto", "waiting", "walkingdog", "walkingtogether"])
+  actions = define_actions( tf.app.flags.FLAGS.action )
 
   # Parameters for dummy model. We only build the model to load the data.
   one_hot = False
