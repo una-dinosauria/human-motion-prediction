@@ -102,6 +102,10 @@ If you use our code, please cite our work
 }
 ```
 
+### Other implementations
+
+* [Pytorch](https://github.com/enriccorona/human-motion-prediction-pytorch) by [@enriccorona](https://github.com/enriccorona)
+
 ### Acknowledgments
 
 The pre-processed human 3.6m dataset and some of our evaluation code (specially under `src/data_utils.py`) was ported/adapted from [SRNN](https://github.com/asheshjain399/RNNexp/tree/srnn/structural_rnn) by [@asheshjain399](https://github.com/asheshjain399).
